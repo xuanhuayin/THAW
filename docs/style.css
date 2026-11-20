@@ -63,6 +63,7 @@ h1 {
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  gap: 8px;
   min-height: 44px;
   padding: 9px 15px;
   border-radius: 7px;
@@ -74,6 +75,20 @@ h1 {
 .primary:hover { background: #173754; border-color: #173754; }
 .secondary, .pair-play { background: #fff; color: var(--navy); border: 1px solid var(--line); }
 .secondary:hover, .pair-play:hover { border-color: var(--navy); background: var(--ice); }
+.icon { display: inline-block; flex: 0 0 auto; position: relative; width: 16px; height: 16px; }
+.icon::before, .icon::after { content: ""; position: absolute; }
+.icon-download::before {
+  inset: 0 0 4px;
+  background: currentColor;
+  clip-path: polygon(44% 4%, 56% 4%, 56% 66%, 73% 46%, 81% 55%, 50% 96%, 19% 55%, 27% 46%, 44% 66%);
+}
+.icon-download::after { inset: auto 1px 1px; height: 5px; border: 1.5px solid; border-top: 0; border-radius: 0 0 2px 2px; }
+.icon-code::before, .icon-code::after { top: 5px; width: 6px; height: 6px; border: solid; border-width: 0 0 1.5px 1.5px; }
+.icon-code::before { left: 1px; transform: rotate(45deg); }
+.icon-code::after { right: 1px; transform: rotate(225deg); }
+.icon-mail { margin-right: 6px; vertical-align: -.18em; color: var(--navy); }
+.icon-mail::before { inset: 3px 0 2px; border: 1.5px solid; border-radius: 2px; }
+.icon-mail::after { inset: 4px 4px auto; height: 7px; border: solid; border-width: 0 1.5px 1.5px 0; transform: rotate(45deg); }
 :focus-visible { outline: 2px solid var(--navy); outline-offset: 4px; }
 [hidden] { display: none; }
 
