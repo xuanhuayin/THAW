@@ -6,7 +6,7 @@
   <meta name="description" content="THAW adds a norm-controlled temporal residual to classifier-free guidance during early video denoising.">
   <link rel="canonical" href="https://xuanhuayin.github.io/THAW/">
   <title>THAW | Frozen by the Mean: Early Temporal Guidance Unfreezes Motion in Video Diffusion Models</title>
-  <link rel="stylesheet" href="style.css?v=4">
+  <link rel="stylesheet" href="style.css?v=5">
 </head>
 <body>
   <header class="top">
@@ -39,7 +39,7 @@
           <p class="affiliations"><span><sup>1</sup> The University of Sydney</span><span><sup>2</sup> Indiana University</span></p>
           <div class="actions">
             <a class="primary" href="THAW.pdf" download><span class="icon icon-download" aria-hidden="true"></span>Download PDF</a>
-            <a class="secondary" href="https://github.com/xuanhuayin/THAW"><span class="icon icon-code" aria-hidden="true"></span>GitHub</a>
+            <a class="secondary" href="https://github.com/xuanhuayin/THAW"><span class="icon icon-github" aria-hidden="true"></span>GitHub</a>
           </div>
         </div>
         <article class="pair featured">
@@ -48,7 +48,7 @@
               <h2>Breaching whale</h2>
               <p>A humpback whale hurls itself clear of a stormy sea and slams down in a burst of spray.</p>
             </div>
-            <button class="pair-play" type="button" hidden>Play pair</button>
+            <button class="pair-play" type="button" hidden><span class="icon icon-play" aria-hidden="true"></span><span class="pair-label">Play pair</span></button>
           </div>
           <div class="videos">
             <figure>
@@ -88,7 +88,7 @@
               <h3>Stallion in the surf</h3>
               <p>A black stallion rears and gallops through crashing surf on a misty beach.</p>
             </div>
-            <button class="pair-play" type="button" hidden>Play pair</button>
+            <button class="pair-play" type="button" hidden><span class="icon icon-play" aria-hidden="true"></span><span class="pair-label">Play pair</span></button>
           </div>
           <div class="videos">
             <figure>
@@ -133,7 +133,7 @@
 thaw --model wan-1.3b --paired \
   --prompt "A red kite loops over an open field." \
   --output outputs/kite.mp4</code></pre>
-        <a class="secondary" href="https://github.com/xuanhuayin/THAW#installation"><span class="icon icon-code" aria-hidden="true"></span>Code and installation</a>
+        <a class="secondary" href="https://github.com/xuanhuayin/THAW#installation"><span class="icon icon-github" aria-hidden="true"></span>Code and installation</a>
       </section>
     </div>
   </main>
@@ -148,6 +148,7 @@ thaw --model wan-1.3b --paired \
   <script>
     for (const pair of document.querySelectorAll(".pair")) {
       const button = pair.querySelector(".pair-play");
+      const label = button.querySelector(".pair-label");
       const videos = [...pair.querySelectorAll("video")];
       button.hidden = false;
       button.addEventListener("click", async () => {
@@ -159,10 +160,12 @@ thaw --model wan-1.3b --paired \
           if (results.some(result => result.status === "rejected")) videos.forEach(video => video.pause());
         }
       });
+      const update = () => {
+        const playing = videos.some(video => !video.paused);
+        button.classList.toggle("is-playing", playing);
+        label.textContent = playing ? "Pause pair" : "Play pair";
+      };
       for (const video of videos) {
-        const update = () => {
-          button.textContent = videos.some(clip => !clip.paused) ? "Pause pair" : "Play pair";
-        };
         for (const event of ["play", "pause", "ended"]) video.addEventListener(event, update);
       }
     }

@@ -1,0 +1,8 @@
+GitHub Invertocat
+https://brand.github.com/foundations/logo
+github.png is the unmodified GitHub_Invertocat_Black.png from the official logo package.
+
+Lucide
+https://github.com/lucide-icons/lucide/tree/c1a02a04d4f3f7049d44567d62b8b06cff0b9103/icons
+file-down.png, play.png, pause.png, and mail.png are transparent raster exports.
+See LICENSE-LUCIDE.txt.

@@ -73,22 +73,29 @@ h1 {
 }
 .primary { color: #fff; background: var(--navy); border: 1px solid var(--navy); }
 .primary:hover { background: #173754; border-color: #173754; }
-.secondary, .pair-play { background: #fff; color: var(--navy); border: 1px solid var(--line); }
-.secondary:hover, .pair-play:hover { border-color: var(--navy); background: var(--ice); }
-.icon { display: inline-block; flex: 0 0 auto; position: relative; width: 16px; height: 16px; }
-.icon::before, .icon::after { content: ""; position: absolute; }
-.icon-download::before {
-  inset: 0 0 4px;
+.secondary { background: #fff; color: var(--navy); border: 1px solid var(--line); }
+.secondary:hover { border-color: var(--navy); background: var(--ice); }
+.actions a { border-radius: 999px; padding-inline: 17px; }
+.icon {
+  --icon-size: 18px;
+  display: inline-block;
+  flex: 0 0 auto;
+  width: var(--icon-size);
+  height: var(--icon-size);
   background: currentColor;
-  clip-path: polygon(44% 4%, 56% 4%, 56% 66%, 73% 46%, 81% 55%, 50% 96%, 19% 55%, 27% 46%, 44% 66%);
+  mask: var(--icon-image) center / contain no-repeat;
 }
-.icon-download::after { inset: auto 1px 1px; height: 5px; border: 1.5px solid; border-top: 0; border-radius: 0 0 2px 2px; }
-.icon-code::before, .icon-code::after { top: 5px; width: 6px; height: 6px; border: solid; border-width: 0 0 1.5px 1.5px; }
-.icon-code::before { left: 1px; transform: rotate(45deg); }
-.icon-code::after { right: 1px; transform: rotate(225deg); }
-.icon-mail { margin-right: 6px; vertical-align: -.18em; color: var(--navy); }
-.icon-mail::before { inset: 3px 0 2px; border: 1.5px solid; border-radius: 2px; }
-.icon-mail::after { inset: 4px 4px auto; height: 7px; border: solid; border-width: 0 1.5px 1.5px 0; transform: rotate(45deg); }
+.icon-download { --icon-image: url("assets/icons/file-down.png"); }
+.icon-github { background: url("assets/icons/github.png") center / contain no-repeat; mask: none; }
+.icon-mail {
+  --icon-image: url("assets/icons/mail.png");
+  --icon-size: 15px;
+  margin-right: 6px;
+  vertical-align: -.18em;
+  color: var(--navy);
+}
+.icon-play { --icon-image: url("assets/icons/play.png"); --icon-size: 15px; }
+.is-playing .icon-play { --icon-image: url("assets/icons/pause.png"); }
 :focus-visible { outline: 2px solid var(--navy); outline-offset: 4px; }
 [hidden] { display: none; }
 
@@ -126,7 +133,17 @@ h1 {
 }
 .pair-head :is(h2, h3) { margin: 0; font: 700 1.13rem/1.28 var(--body); }
 .pair-head p { max-width: 61ch; color: var(--muted); margin: 6px 0 0; line-height: 1.5; font-size: .87rem; }
-.pair-play { min-height: 36px; padding: 6px 12px; white-space: nowrap; }
+.pair-play {
+  min-height: 36px;
+  padding: 6px 12px;
+  gap: 5px;
+  border: 1px solid #e7c7c2;
+  border-radius: 999px;
+  background: #fcf3f1;
+  color: var(--rose-ink);
+  white-space: nowrap;
+}
+.pair-play:hover, .pair-play.is-playing { background: var(--rose); }
 .videos { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: clamp(7px, 1.6vw, 17px); }
 .videos figure { min-width: 0; }
 .videos figcaption {
