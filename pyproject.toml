@@ -1,0 +1,42 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "thaw-video"
+version = "1.0.0"
+description = "Early temporal residual guidance for video diffusion models"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = ["torch==2.10.0"]
+
+[project.optional-dependencies]
+video = [
+  "torchvision==0.25.0",
+  "diffusers==0.36.0",
+  "transformers==5.6.2",
+  "accelerate==1.13.0",
+  "huggingface-hub==1.14.0",
+  "safetensors>=0.4.5",
+  "sentencepiece>=0.2.0",
+  "ftfy>=6.3",
+  "imageio[ffmpeg]>=2.37",
+]
+analysis = ["numpy>=1.26", "scipy>=1.13"]
+test = ["pytest>=7.2,<9", "ruff>=0.10"]
+
+[project.scripts]
+thaw = "thaw.cli:main"
+thaw-frontier = "thaw.frontier:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-ra"
+markers = ["integration: exercises an upstream pipeline with compact initialized models"]
+
+[tool.ruff]
+target-version = "py311"
+line-length = 110

@@ -1,0 +1,161 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="THAW adds a norm-controlled temporal residual to classifier-free guidance during early video denoising.">
+  <link rel="canonical" href="https://xuanhuayin.github.io/THAW/">
+  <title>THAW | Frozen by the Mean: Early Temporal Guidance Unfreezes Motion in Video Diffusion Models</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="top">
+    <div class="wrap bar">
+      <a class="wordmark" href="#top">THAW</a>
+      <nav aria-label="Project sections">
+        <a href="#abstract">Abstract</a>
+        <a href="#examples">Examples</a>
+        <a href="#method">Method</a>
+        <a href="#run">Run</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="top" class="wrap">
+    <section class="hero" aria-labelledby="title">
+      <h1 id="title">Frozen by the Mean</h1>
+      <p class="subtitle">Early Temporal Guidance Unfreezes Motion in Video Diffusion Models</p>
+      <ul class="authors" aria-label="Authors">
+        <li>Xuanhua Yin<sup>1</sup></li>
+        <li>Boyu Wei<sup>1</sup></li>
+        <li>Chengkun Yue<sup>2</sup></li>
+        <li>Shunqi Mao<sup>1</sup></li>
+        <li>Chuanzhi Xu<sup>1</sup></li>
+        <li>Wei Guo<sup>1</sup></li>
+        <li>Weidong Cai<sup>1</sup></li>
+      </ul>
+      <p class="affiliations"><span><sup>1</sup> University of Sydney</span><span><sup>2</sup> Indiana University</span></p>
+      <div class="actions">
+        <a class="primary" href="THAW.pdf" download>Download PDF</a>
+        <a class="secondary" href="https://github.com/xuanhuayin/THAW">GitHub</a>
+        <a class="secondary" href="#examples">Watch the comparisons</a>
+      </div>
+      <figure class="hero-figure">
+        <img src="assets/teaser.webp" alt="Frame-aligned filmstrips comparing stock Wan and THAW on a breaching whale and a running horse">
+        <figcaption>Selected examples from Wan2.1-T2V-14B. The prompt and sampling budget are shared within each pair.</figcaption>
+      </figure>
+    </section>
+
+    <section class="section" id="abstract" aria-labelledby="abstract-title">
+      <div class="section-heading">
+        <h2 id="abstract-title">Abstract</h2>
+      </div>
+      <p class="abstract-text">Video diffusion models can render convincing frames while failing to produce the requested action. Increasing classifier-free guidance (CFG) can strengthen motion, but also saturates and shifts colors. Scalar CFG assigns the same coefficient to the averaged and frame-varying components of its prediction difference, limiting independent control of temporal variation. THAW, Temporal Harmonic Amplification during Warm-up, retains stock CFG and adds a separately weighted residual during an initial denoising window. Its dose specifies the added norm relative to the current CFG difference, giving the extra guidance a consistent relative budget across sampling steps. THAW is training-free and reuses CFG's two model predictions with an unchanged network evaluation count. It improves cost-matched motion over scalar and scheduled CFG on five video models, with positive point estimates against existing guidance methods on three of them. On VBench, THAW raises dynamic degree by about 14 to 15 points over stock CFG while increasing total scores on a different set of three models.</p>
+    </section>
+
+    <section class="section" id="examples" aria-labelledby="example-title">
+      <div class="section-heading">
+        <h2 id="example-title">Paired video examples</h2>
+        <p>Stock Wan2.1 uses CFG 5. THAW adds a causal temporal residual at strength 2 during the first 40% of the same sampling schedule.</p>
+      </div>
+
+      <article class="pair">
+        <div class="pair-head">
+          <div>
+            <h3>Breaching whale</h3>
+            <p>A humpback whale hurls itself clear of a stormy sea and slams down in a burst of spray.</p>
+          </div>
+          <button class="pair-play" type="button" hidden>Play pair</button>
+        </div>
+        <div class="videos">
+          <figure>
+            <figcaption>Wan2.1-14B</figcaption>
+            <video controls playsinline muted preload="none" poster="assets/whale-stock.webp" aria-label="Breaching whale with Wan2.1-14B">
+              <source src="assets/whale-stock.mp4" type="video/mp4">
+            </video>
+          </figure>
+          <figure class="thaw">
+            <figcaption>THAW</figcaption>
+            <video controls playsinline muted preload="none" poster="assets/whale-thaw.webp" aria-label="Breaching whale with THAW">
+              <source src="assets/whale-thaw.mp4" type="video/mp4">
+            </video>
+          </figure>
+        </div>
+      </article>
+
+      <article class="pair">
+        <div class="pair-head">
+          <div>
+            <h3>Stallion in the surf</h3>
+            <p>A black stallion rears and gallops through crashing surf on a misty beach.</p>
+          </div>
+          <button class="pair-play" type="button" hidden>Play pair</button>
+        </div>
+        <div class="videos">
+          <figure>
+            <figcaption>Wan2.1-14B</figcaption>
+            <video controls playsinline muted preload="none" poster="assets/stallion-stock.webp" aria-label="Stallion in the surf with Wan2.1-14B">
+              <source src="assets/stallion-stock.mp4" type="video/mp4">
+            </video>
+          </figure>
+          <figure class="thaw">
+            <figcaption>THAW</figcaption>
+            <video controls playsinline muted preload="none" poster="assets/stallion-thaw.webp" aria-label="Stallion in the surf with THAW">
+              <source src="assets/stallion-thaw.mp4" type="video/mp4">
+            </video>
+          </figure>
+        </div>
+      </article>
+    </section>
+
+    <section class="section" id="method" aria-labelledby="method-title">
+      <div class="section-heading">
+        <h2 id="method-title">Guidance across latent frames</h2>
+        <p>Split the CFG prediction difference into a frame-shared component and a residual. Normalize the residual to a fraction of the difference norm and add it during an initial window.</p>
+      </div>
+      <figure class="method-figure">
+        <img src="assets/method.webp" loading="lazy" alt="THAW overview showing temporal projection, norm matching and the early denoising window">
+      </figure>
+    </section>
+
+    <section class="section run" id="run" aria-labelledby="run-title">
+      <div class="section-heading">
+        <h2 id="run-title">Run THAW</h2>
+        <p>Install the video dependencies on a CUDA system with Python 3.11. Paired mode generates both stock CFG and THAW from the same initial noise.</p>
+      </div>
+      <pre><code>python -m pip install -e '.[video]'
+thaw --model wan-1.3b --paired \
+  --prompt "A red kite loops over an open field." \
+  --output outputs/kite.mp4</code></pre>
+      <a class="secondary" href="https://github.com/xuanhuayin/THAW#installation">Code and installation</a>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="wrap">Contact <a href="mailto:xuanhua.yin@sydney.edu.au">xuanhua.yin@sydney.edu.au</a></div>
+  </footer>
+
+  <script>
+    for (const pair of document.querySelectorAll(".pair")) {
+      const button = pair.querySelector(".pair-play");
+      const videos = [...pair.querySelectorAll("video")];
+      button.hidden = false;
+      button.addEventListener("click", async () => {
+        if (videos.some(video => !video.paused)) {
+          videos.forEach(video => video.pause());
+        } else {
+          videos.forEach(video => { video.currentTime = 0; });
+          const results = await Promise.allSettled(videos.map(video => video.play()));
+          if (results.some(result => result.status === "rejected")) videos.forEach(video => video.pause());
+        }
+      });
+      for (const video of videos) {
+        const update = () => {
+          button.textContent = videos.some(clip => !clip.paused) ? "Pause pair" : "Play pair";
+        };
+        for (const event of ["play", "pause", "ended"]) video.addEventListener(event, update);
+      }
+    }
+  </script>
+</body>
+</html>
