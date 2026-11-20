@@ -130,6 +130,7 @@ h1 {
 .method-figure { padding: clamp(8px, 2vw, 20px); background: var(--sage); border: 1px solid var(--sage-line); border-radius: 14px; }
 .method-figure a { display: block; border-radius: 7px; overflow: hidden; }
 .footer { border-top: 1px solid var(--line); padding: 25px 0; color: var(--muted); font-size: .9rem; }
+.contacts { display: flex; flex-wrap: wrap; gap: 8px 28px; }
 .footer a { color: var(--navy); margin-left: .28em; overflow-wrap: anywhere; text-underline-offset: .2em; }
 pre { padding: 20px; border-radius: 10px; margin: 0 0 16px; overflow-x: auto; background: #19334e; color: #f5f9ff; font-size: .88rem; line-height: 1.65; }
 
